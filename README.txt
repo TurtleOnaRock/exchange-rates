@@ -7,15 +7,15 @@ The implemention provides a set of features and consists of:
     -get all currencies;  
     -get exact currency with currency's code
   -table of exchange rates;
-    -add new exchange rate with pair of codes and rate if they exists in the currency table;
-    -get exact exchange rate with pair of codes;
+    -add new exchange rate with pair of currency's codes (if they exists in the currency table) and rate
+    -get exact exchange rate with pair of currency's codes;
     -get all exchange rates;
     -update the rate value for existing exchange rates;
     -calculate currency exchange;
 The currency exchange block returns the rate and calculate the amount of needed money for 3 cituation:
     -table of exchange rates includes the direct rate for pair, returns the rate;
     -table of exchange rates doesn't include the direct rate but has the reverse rate, returns recalculated rate;
-    -table of exchange rate doesn't include two mentioned cases and it trys to find cross rate for 4 cases:
+    -table of exchange rate doesn't include two mentioned cases and it tries to find cross rate for 4 cases:
       We need exchange currency A-B but table might has one of thoose:
         A-C, B-C;
         A-C, C-B;
