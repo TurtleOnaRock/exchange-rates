@@ -1,10 +1,11 @@
 It is study implementation of exchange rates backend programm (the third task), inspired by the Java-road-map made by https://github.com/zhukovsd.
+
 The link to test:
 The implemention provides a set of features and consists of:
   -table of currencies;
-      -add new currency with fields (name, code, sign);
-      -get all currencies;
-      -get exact currency with currency's code
+   	-add new currency with fields (name, code, sign);
+   	-get all currencies;
+   	-get exact currency with currency's code
   -table of exchange rates;
     -add new exchange rate with pair of codes and rate if they exists in the currency table;
     -get exact exchange rate with pair of codes;
