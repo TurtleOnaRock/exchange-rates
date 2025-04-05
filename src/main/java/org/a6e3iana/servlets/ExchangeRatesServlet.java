@@ -19,8 +19,6 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
 
-    public static final int NO_ID = -1;
-    public static final String EMPTY_STRING = "";
     public static final String FIELD_BASE_CODE = "baseCurrencyCode";
     public static final String FIELD_TARGET_CODE = "targetCurrencyCode";
     public static final String FIELD_RATE = "rate";
@@ -38,6 +36,7 @@ public class ExchangeRatesServlet extends HttpServlet {
         String baseCode = req.getParameter(FIELD_BASE_CODE);
         String targetCode = req.getParameter(FIELD_TARGET_CODE);
         String rateString = req.getParameter(FIELD_RATE);
+
         ParameterUtils.validateCurrencyCode(baseCode, Config.CURRENCY_CODE_LENGTH);
         ParameterUtils.validateCurrencyCode(targetCode, Config.CURRENCY_CODE_LENGTH);
         ParameterUtils.validateParameter(FIELD_RATE, rateString, Config.RATE_LENGTH);
@@ -45,9 +44,9 @@ public class ExchangeRatesServlet extends HttpServlet {
         double rate = ParameterUtils.parseDouble(rateString);
         ParameterUtils.validateDouble(rate, Config.RATE_MIN, Config.RATE_MAX);
 
-        CurrencyDTO base = new CurrencyDTO(NO_ID , baseCode, EMPTY_STRING, EMPTY_STRING);
-        CurrencyDTO target = new CurrencyDTO(NO_ID , targetCode, EMPTY_STRING, EMPTY_STRING);
-        ExchangeRateDTO exchangeRateRequestDto = new ExchangeRateDTO(NO_ID, base, target, rate);
+        CurrencyDTO base = new CurrencyDTO(baseCode);
+        CurrencyDTO target = new CurrencyDTO(targetCode);
+        ExchangeRateDTO exchangeRateRequestDto = new ExchangeRateDTO(base, target, rate);
         ExchangeRateService service = new ExchangeRateService();
         ExchangeRateDTO exchangeRateResponseDto = service.save(exchangeRateRequestDto);
 

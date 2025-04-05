@@ -55,7 +55,7 @@ public class ExchangeService {
 
     private double getRate (String baseCode, String targetCode) throws ServletException {
         ExchangeRateDAO dao = new ExchangeRateDAOImpl();
-        Optional<ExchangeRate> exchangeRateOpt = dao.findByCode(baseCode + targetCode);
+        Optional<ExchangeRate> exchangeRateOpt = dao.findByCodes(baseCode, targetCode);
         if(exchangeRateOpt.isPresent()) {
             ExchangeRate exchangeRate = exchangeRateOpt.get();
             return exchangeRate.getRate();

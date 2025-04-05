@@ -11,6 +11,7 @@
 *.iws
 *.iml
 .idea/*
+.src/main/resources/scripts.db/*
 
 
 ### Eclipse ###

@@ -27,8 +27,8 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CurrencyService service = new CurrencyService();
-        resp.setStatus(ResponseCode.GET_SUCCESS);
         req.setAttribute(Attributes.DTO, service.getAll());
+        resp.setStatus(ResponseCode.GET_SUCCESS);
     }
 
     @Override
@@ -36,22 +36,16 @@ public class CurrenciesServlet extends HttpServlet {
         String name = req.getParameter(FIELD_NAME);
         String code = req.getParameter(FIELD_CODE);
         String sign = req.getParameter(FIELD_SIGN);
+
         ParameterUtils.validateCurrencyCode(code, Config.CURRENCY_CODE_LENGTH);
         ParameterUtils.validateParameter(FIELD_NAME, name, NAME_LENGTH);
         ParameterUtils.validateParameter(FIELD_SIGN, sign, SIGN_LENGTH);
-        CurrencyDTO currencyRequestDto = makeCurrencyDto(name, code, sign);
+
+        CurrencyDTO currencyRequestDto = new CurrencyDTO(code, name, sign);
         CurrencyService service = new CurrencyService();
         CurrencyDTO currencyResponseDto = service.save(currencyRequestDto);
         resp.setStatus(ResponseCode.GET_SUCCESS);
         req.setAttribute(Attributes.DTO, currencyResponseDto);
     }
 
-    private CurrencyDTO makeCurrencyDto(String name, String code, String sign){
-        CurrencyDTO currencyDto = new CurrencyDTO();
-        currencyDto.setName(name);
-        currencyDto.setCode(code);
-        currencyDto.setSign(sign);
-        currencyDto.setId(-1);
-        return currencyDto;
-    }
 }

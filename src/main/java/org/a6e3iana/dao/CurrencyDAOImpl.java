@@ -16,12 +16,6 @@ public class CurrencyDAOImpl implements CurrencyDAO{
 
     public static final String CURRENCY_ALREADY_EXISTS = "Currency already exists: ";
 
-    public static final String SQL_GET_ALL = "SELECT * FROM Currencies;";
-    public static final String SQL_PREPARED_GET_BY_CODE = "SELECT * FROM Currencies WHERE Code=?;";
-    public static final String SQL_PREPARED_INSERT = "INSERT INTO Currencies (Code, FullName, Sign) VALUES (?, ?, ?);";
-    public static final String SQL_PREPARED_UPDATE = "UPDATE Currencies SET Code = ?, FullName = ?, Sign = ? WHERE ID = ?;";
-    public static final String SQL_PREPARED_GET_BY_ID = "SELECT * FROM Currencies WHERE ID = ?;";
-
     private final DataSource dataSource;
 
     public CurrencyDAOImpl() {
@@ -29,19 +23,21 @@ public class CurrencyDAOImpl implements CurrencyDAO{
     }
 
     @Override
-    public List<Currency> getAll() throws ServletException {
-        try(Connection connection = this.dataSource.getConnection()){
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SQL_GET_ALL);
+    public void delete(Integer integer) throws ServletException {
+        throw new ServletException("No implementation method: delete, in Currency DAO");
+    }
+
+    @Override
+    public List<Currency> findAll() throws ServletException {
+        final String query = "SELECT * FROM Currencies;";
+
+        try(Connection connection = this.dataSource.getConnection();
+            Statement statement = connection.createStatement()){
+
+            ResultSet resultSet = statement.executeQuery(query);
             List<Currency> currencies = new ArrayList<>();
-            int id;
-            String code, fullName, sign;
             while(resultSet.next()){
-                id = resultSet.getInt(1);
-                code = resultSet.getString(2);
-                fullName = resultSet.getString(3);
-                sign = resultSet.getString(4);
-                currencies.add(new Currency(id, code, fullName, sign));
+                currencies.add(getCurrency(resultSet));
             }
             return currencies;
         } catch (SQLException e){
@@ -51,15 +47,15 @@ public class CurrencyDAOImpl implements CurrencyDAO{
 
     @Override
     public Optional<Currency> findByCode(String code) throws ServletException{
-        try(Connection connection = this.dataSource.getConnection()){
-            PreparedStatement statement = connection.prepareStatement(SQL_PREPARED_GET_BY_CODE);
+        final String query = "SELECT * FROM Currencies WHERE Code=?;";
+
+        try(Connection connection = this.dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)){
+
             statement.setString(1, code);
             ResultSet result = statement.executeQuery();
             if(result.next()) {
-                int id = result.getInt(1);
-                String fullName = result.getString(3);
-                String sign = result.getString(4);
-                return Optional.of(new Currency(id, code, fullName, sign));
+                return Optional.of(getCurrency(result));
             }else{
                 return Optional.empty();
             }
@@ -68,16 +64,17 @@ public class CurrencyDAOImpl implements CurrencyDAO{
         }
     }
 
-    public Optional<Currency> findById(int id) throws ServletException{
-        try(Connection connection = this.dataSource.getConnection()){
-            PreparedStatement statement = connection.prepareStatement(SQL_PREPARED_GET_BY_ID);
+    @Override
+    public Optional<Currency> findById(Integer id) throws ServletException{
+        final String query = "SELECT * FROM Currencies WHERE ID = ?;";
+
+        try(Connection connection = this.dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)){
+
             statement.setInt(1, id);
-            ResultSet result = statement.executeQuery();
-            if(result.next()){
-                String code = result.getString(2);
-                String fullName = result.getString(3);
-                String sign = result.getString(4);
-                return Optional.of(new Currency(id, code, fullName, sign));
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return Optional.of(getCurrency(resultSet));
             }else{
                 return Optional.empty();
             }
@@ -88,9 +85,11 @@ public class CurrencyDAOImpl implements CurrencyDAO{
 
     @Override
     public Currency save(Currency currency) throws ServletException{
-        try (Connection connection = this.dataSource.getConnection()){
-            PreparedStatement statement = connection.prepareStatement(SQL_PREPARED_INSERT,
-                                                                                Statement.RETURN_GENERATED_KEYS);
+        final String query = "INSERT INTO Currencies (Code, FullName, Sign) VALUES (?, ?, ?);";
+
+        try (Connection connection = this.dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)){
+
             statement.setString(1, currency.getCode());
             statement.setString(2, currency.getFullName());
             statement.setString(3, currency.getSign());
@@ -108,8 +107,11 @@ public class CurrencyDAOImpl implements CurrencyDAO{
 
     @Override
     public Optional<Currency> update(Currency currency) throws ServletException {
-        try(Connection connection = this.dataSource.getConnection()){
-            PreparedStatement statement = connection.prepareStatement(SQL_PREPARED_UPDATE);
+        final String query = "UPDATE Currencies SET Code = ?, FullName = ?, Sign = ? WHERE ID = ?;";
+
+        try(Connection connection = this.dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)){
+
             statement.setString(1, currency.getCode());
             statement.setString(2, currency.getFullName());
             statement.setString(3, currency.getSign());
@@ -119,6 +121,14 @@ public class CurrencyDAOImpl implements CurrencyDAO{
             throw new FailedConnectionToDataBaseException(ExceptionMessages.FAILED_CONNECTION);
         }
         return findById(currency.getId());
+    }
+
+    private Currency getCurrency(ResultSet resultSet) throws SQLException{
+        int id = resultSet.getInt(1);
+        String code = resultSet.getString(2);
+        String fullName = resultSet.getString(3);
+        String sign = resultSet.getString(4);
+        return new Currency(id, code, fullName, sign);
     }
 
 }

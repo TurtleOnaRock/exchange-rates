@@ -14,4 +14,10 @@ public class ExchangeRateDTO {
     private CurrencyDTO baseCurrency;
     private CurrencyDTO targetCurrency;
     private double rate;
+
+    public ExchangeRateDTO (CurrencyDTO baseCurrency, CurrencyDTO targetCurrency, double rate){
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
+        this.rate = rate;
+    }
 }

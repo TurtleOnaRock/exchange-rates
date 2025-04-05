@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public interface ExchangeRateDAO  {
-     Optional<ExchangeRate> findByCode(String codes) throws ServletException;
-     List<ExchangeRate> getAll() throws ServletException;
-     ExchangeRate save(ExchangeRate exchangeRate) throws ServletException;
-     Optional<ExchangeRate> update(ExchangeRate exchangeRateRequest) throws ServletException;
+public interface ExchangeRateDAO extends CrudDAO<ExchangeRate, Integer> {
+
      List<CrossExchanger> getCrossExchangeRates (int baseCurrencyId, int targetCurrencyId) throws ServletException;
+
+     Optional<ExchangeRate> findByCodes(String baseCode, String targetCode) throws ServletException;
+
 }

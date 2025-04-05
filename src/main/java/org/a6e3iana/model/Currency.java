@@ -1,13 +1,11 @@
 package org.a6e3iana.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Currency {
 
@@ -16,8 +14,7 @@ public class Currency {
     private String fullName;
     private String sign;
 
-    public Currency (int id, String code, String fullName, String sign){
-        this.id = id;
+    public Currency (String code, String fullName, String sign){
         this.code = code;
         this.fullName = fullName;
         this.sign = sign;

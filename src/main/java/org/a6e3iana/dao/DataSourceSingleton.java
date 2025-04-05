@@ -8,25 +8,15 @@ import javax.sql.DataSource;
 public class DataSourceSingleton {
 
     private final static String DRIVER_CLASS_NAME = "org.sqlite.JDBC";
-    private final static String DB_FILE_NAME = "ExchangeDataBase.db";
-    private final static String URL="jdbc:sqlite:";
-    private final static String USER="";
-    private final static String PASSWORD="";
+    private final static String DATA_BASE_URL ="jdbc:sqlite:/opt/apache-tomcat-11.0.5/webapps/exchange-rate-1.0.0/WEB-INF/classes/ExchangeDataBase.db";
 
     private static DataSourceSingleton instance;
     private static HikariDataSource dataSource;
 
     private DataSourceSingleton(){
-        try{
-            Class.forName(DRIVER_CLASS_NAME);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         HikariConfig config = new HikariConfig();
-        String dbPath = getClass().getClassLoader().getResource(DB_FILE_NAME).getPath();
-        config.setJdbcUrl(URL+dbPath);
-        config.setUsername(USER);
-        config.setPassword(PASSWORD);
+        config.setDriverClassName(DRIVER_CLASS_NAME);
+        config.setJdbcUrl(DATA_BASE_URL);
         dataSource = new HikariDataSource(config);
     }
 

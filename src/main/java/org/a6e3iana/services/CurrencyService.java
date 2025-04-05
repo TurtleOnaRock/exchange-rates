@@ -22,7 +22,7 @@ public class CurrencyService {
     public List<CurrencyDTO> getAll() throws ServletException {
         List<CurrencyDTO> currenciesDTO = new ArrayList<>();
         CurrencyDAO dao = new CurrencyDAOImpl();
-        List<Currency> currencies = dao.getAll();
+        List<Currency> currencies = dao.findAll();
         if(currencies.isEmpty()){
             throw new NoteIsNotFoundException(ExceptionMessages.EMPTY_DATA_BASE);
         }
@@ -45,6 +45,5 @@ public class CurrencyService {
         Currency currencyResponse = dao.save(convertDtoToModel(currencyRequestDto));
         return convertModelToDto(currencyResponse);
     }
-
 
 }

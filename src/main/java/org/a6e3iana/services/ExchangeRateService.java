@@ -18,13 +18,12 @@ import java.util.Optional;
 
 
 public class ExchangeRateService {
-    public static final int NO_ID = -1;
 
-    public ExchangeRateDTO getExchangeRate (String codes) throws ServletException {
+    public ExchangeRateDTO getExchangeRate (String baseCode, String targetCode) throws ServletException {
         ExchangeRateDAO dao = new ExchangeRateDAOImpl();
-        Optional<ExchangeRate> exchangeRateOpt = dao.findByCode(codes);
+        Optional<ExchangeRate> exchangeRateOpt = dao.findByCodes(baseCode, targetCode);
         if(exchangeRateOpt.isEmpty()){
-            throw new NoteIsNotFoundException(ExceptionMessages.EXCHANGE_NOT_FOUND);
+            throw new NoteIsNotFoundException(ExceptionMessages.EXCHANGE_NOT_FOUND + baseCode + targetCode);
         }
         return ExchangeRateDTOUtils.convertModelToDto(exchangeRateOpt.get());
     }
@@ -32,7 +31,7 @@ public class ExchangeRateService {
     public List<ExchangeRateDTO> getAll () throws ServletException{
         ExchangeRateDAO dao = new ExchangeRateDAOImpl();
         List<ExchangeRateDTO> ratesResponseDto = new ArrayList<>();
-        List<ExchangeRate> rates = dao.getAll();
+        List<ExchangeRate> rates = dao.findAll();
         if(rates.isEmpty()){
             throw new NoteIsNotFoundException(ExceptionMessages.EMPTY_DATA_BASE);
         }
@@ -65,7 +64,7 @@ public class ExchangeRateService {
         double rate = dto.getRate();
         Currency base = getCurrencyByCode(baseCode);
         Currency target = getCurrencyByCode(targetCode);
-        return new ExchangeRate(NO_ID, base, target, rate);
+        return new ExchangeRate(base, target, rate);
     }
 
     private Currency getCurrencyByCode(String code) throws ServletException{

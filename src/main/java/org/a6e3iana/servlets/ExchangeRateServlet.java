@@ -18,17 +18,19 @@ import java.io.IOException;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
     public static final String FIELD_RATE = "rate";
-    public static final String EMPTY_STRING = "";
-    public static final int NO_ID = -1;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String codes = req.getPathInfo().replaceFirst("/", "");
         ParameterUtils.validateCurrencyCode(codes, Config.CURRENCY_CODE_LENGTH*2);
+
+        String baseCode = codes.substring(0,3);
+        String targetCode = codes.substring(3,6);
+
         ExchangeRateService service = new ExchangeRateService();
-        ExchangeRateDTO exRateResponseDto = service.getExchangeRate(codes);
+        ExchangeRateDTO exchangeRateResponseDto = service.getExchangeRate(baseCode, targetCode);
         resp.setStatus(ResponseCode.GET_SUCCESS);
-        req.setAttribute(Attributes.DTO, exRateResponseDto);
+        req.setAttribute(Attributes.DTO, exchangeRateResponseDto);
     }
 
     @Override
@@ -44,13 +46,14 @@ public class ExchangeRateServlet extends HttpServlet {
 
         String baseCode = codes.substring(0, 3);
         String targetCode = codes.substring(3, 6);
-        CurrencyDTO baseCurrencyDto = new CurrencyDTO(NO_ID, baseCode, EMPTY_STRING, EMPTY_STRING);
-        CurrencyDTO targetCurrencyDto = new CurrencyDTO(NO_ID, targetCode, EMPTY_STRING, EMPTY_STRING);
-        ExchangeRateDTO exRateRequestDto = new ExchangeRateDTO(NO_ID, baseCurrencyDto, targetCurrencyDto, rate);
+        CurrencyDTO baseCurrencyDto = new CurrencyDTO(baseCode);
+        CurrencyDTO targetCurrencyDto = new CurrencyDTO(targetCode);
+        ExchangeRateDTO exchangeRateRequestDto = new ExchangeRateDTO(baseCurrencyDto, targetCurrencyDto, rate);
+
         ExchangeRateService service = new ExchangeRateService();
-        ExchangeRateDTO exRateResponseDto = service.update(exRateRequestDto);
+        ExchangeRateDTO exchangeRateResponseDto = service.update(exchangeRateRequestDto);
         resp.setStatus(ResponseCode.PATCH_SUCCESS);
-        req.setAttribute(Attributes.DTO, exRateResponseDto);
+        req.setAttribute(Attributes.DTO, exchangeRateResponseDto);
     }
 
     @Override
