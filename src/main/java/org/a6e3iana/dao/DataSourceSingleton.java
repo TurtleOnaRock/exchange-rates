@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 public class DataSourceSingleton {
 
     private final static String DRIVER_CLASS_NAME = "org.sqlite.JDBC";
-    private final static String DATA_BASE_URL ="jdbc:sqlite:/opt/apache-tomcat-11.0.5/webapps/exchange-rate-1.0.0/WEB-INF/classes/ExchangeDataBase.db";
+    private final static String DATA_BASE_URL ="jdbc:sqlite:/opt/apache-tomcat-11.0.5/webapps/exchange-rate/WEB-INF/classes/ExchangeDataBase.db";
 
     private static DataSourceSingleton instance;
     private static HikariDataSource dataSource;
