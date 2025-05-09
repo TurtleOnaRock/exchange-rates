@@ -1,6 +1,6 @@
 It is study implementation of exchange rates backend program (the third task), inspired by the Java-road-map made by https://github.com/zhukovsd.
 
-The link to test: http://77.95.201.243:8080/exchange-rate/
+The link to test: http://77.95.201.243:8080/exchange-rate-1.0.0/
 The implementation provides a set of features and consists of:
   -table of currencies;
     -add new currency with fields (name, code, sign);
