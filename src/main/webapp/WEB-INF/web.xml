@@ -3,13 +3,35 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
          https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
+
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+
     <filter>
-        <filter-name>JsonFilter</filter-name>
-        <filter-class>org.a6e3iana.filters.JsonFilter</filter-class>
+        <filter-name>JsonEncodingFilter</filter-name>
+        <filter-class>org.a6e3iana.filters.JsonEncodingFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>JsonFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <filter-name>JsonEncodingFilter</filter-name>
+        <url-pattern>/currencies</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>JsonEncodingFilter</filter-name>
+        <url-pattern>/currency/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>JsonEncodingFilter</filter-name>
+        <url-pattern>/exchangeRates</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>JsonEncodingFilter</filter-name>
+        <url-pattern>/exchangeRate/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>JsonEncodingFilter</filter-name>
+        <url-pattern>/exchange</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -18,6 +40,23 @@
     </filter>
     <filter-mapping>
         <filter-name>ExceptionHandlerFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/currencies</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>ExceptionHandlerFilter</filter-name>
+        <url-pattern>/currency/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ExceptionHandlerFilter</filter-name>
+        <url-pattern>/exchangeRates</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ExceptionHandlerFilter</filter-name>
+        <url-pattern>/exchangeRate/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ExceptionHandlerFilter</filter-name>
+        <url-pattern>/exchange</url-pattern>
+    </filter-mapping>
+
 </web-app>
